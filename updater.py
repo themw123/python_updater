@@ -84,9 +84,9 @@ class Updater:
                 
                 asset_name = None
                 if self.type == "client":
-                    if self.type == "Windows":
+                    if self.os_type == "Windows":
                         asset_name = "windows-client.zip"
-                    elif self.type == "Linux":
+                    elif self.os_type == "Linux":
                         asset_name = "linux-client.zip"
                 else:
                     asset_name = "windows-backend.zip"

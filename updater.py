@@ -82,6 +82,7 @@ class Updater:
             if self.sha != self.config["version"]:
                 print(f"\n- update available with sha: {self.sha}")
                 
+                asset_name = None
                 if self.type == "client":
                     if self.type == "Windows":
                         asset_name = "windows-client.zip"

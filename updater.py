@@ -19,6 +19,7 @@ class Updater:
         self.sha = None
         self.extension = os.path.splitext(sys.argv[0])[1]
         self.os_type = platform.system()
+        self.current_dir = os.path.dirname(os.path.realpath(__file__))
         
     def run(self):
         if self.os_type not in ['Windows', 'Linux']:
@@ -42,7 +43,7 @@ class Updater:
          
          
             
-        update_url = self.check_for_update()
+        update_url = self.set_sha_and_check_for_update()
         if self.type == "backend":
             if self.os_type == 'Windows':
                 import msvcrt
@@ -73,12 +74,19 @@ class Updater:
                 if user_input.lower() == 'yes':
                     self.download_update(update_url)
                 
-    def check_for_update(self):
+    def set_sha_and_check_for_update(self):
         api_url = "https://api.github.com/repos/themw123/jarvis_v2/releases/latest"
         try:
             response = requests.get(api_url)
             latest_release = response.json()
             self.sha = latest_release['tag_name'].replace("Release-", "")
+            
+            if self.config["version"] == "0":
+                self.config["version"] = str(self.sha)
+                config_path = os.path.join(self.current_dir, "config.json")
+                with open(config_path, 'w') as file:
+                    json.dump(self.config, file, indent=4)
+                    
             if self.sha != self.config["version"]:
                 print(f"\n- update available with sha: {self.sha}")
                 
@@ -187,7 +195,6 @@ class Updater:
             sys.exit()
         print("\n- you can close the current window.")
 
-        
         
             
           

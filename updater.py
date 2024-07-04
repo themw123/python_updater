@@ -166,7 +166,7 @@ class Updater:
         
         self.config["version"] = str(self.sha)
         with open(os.path.join(current_dir, "config.json"), "w", encoding="utf-8") as file:
-            json.dump(self.config, file, indent=4, ensure_ascii=False)      
+            json.dump(self.config, file, indent=2, ensure_ascii=False)      
 
         
         print("\n- update complete.")

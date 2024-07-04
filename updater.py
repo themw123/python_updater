@@ -177,11 +177,9 @@ class Updater:
             json.dump(self.config, file, indent=2, ensure_ascii=False)      
 
         
-        print("\n- update complete.")
+        print("\n- update complete, restarting ...")
         time.sleep(2)
-            
-        print("\n- starting new version ...")
-        
+                    
         time.sleep(2)
         if self.os_type == "Windows":
             updated_client = os.path.join(current_dir, 'assisstant.exe')

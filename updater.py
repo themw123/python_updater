@@ -81,12 +81,6 @@ class Updater:
             latest_release = response.json()
             self.sha = latest_release['tag_name'].replace("Release-", "")
             
-            if self.config["version"] == "0":
-                self.config["version"] = str(self.sha)
-                config_path = os.path.join(self.current_dir, "config.json")
-                with open(config_path, 'w') as file:
-                    json.dump(self.config, file, indent=4)
-                    
             if self.sha != self.config["version"]:
                 print(f"\n- update available with sha: {self.sha}")
                 

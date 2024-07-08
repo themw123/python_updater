@@ -17,7 +17,7 @@ class Updater:
     def __init__(self, config, type):
         self.config = config
         self.type = type
-        self.sha = None
+        self.version = None
         self.extension = os.path.splitext(sys.argv[0])[1]
         self.os_type = platform.system()
         self.current_dir = os.path.dirname(os.path.realpath(__file__))
@@ -44,7 +44,7 @@ class Updater:
         else:
             print("\n- checking for updates...")
 
-        update_url = self.set_sha_and_check_for_update()
+        update_url = self.set_version_and_check_for_update()
         if self.type == "backend":
             if self.os_type == 'Windows':
                 import msvcrt
@@ -77,15 +77,15 @@ class Updater:
                 if user_input.lower() == 'yes':
                     self.download_update(update_url)
 
-    def set_sha_and_check_for_update(self):
+    def set_version_and_check_for_update(self):
         api_url = "https://api.github.com/repos/themw123/jarvis_v2/releases/latest"
         try:
             response = requests.get(api_url)
             latest_release = response.json()
-            self.sha = latest_release['tag_name'].replace("Release-", "")
+            self.version = latest_release['tag_name'].replace("Release-", "")
 
-            if self.sha != self.config["version"]:
-                print(f"\n- update available with sha: {self.sha}")
+            if self.version != self.config["version"]:
+                print(f"\n- update available with version: {self.version}")
 
                 asset_name = None
                 if self.type == "client":
@@ -109,9 +109,9 @@ class Updater:
 
     def download_update(self, download_url):
         if self.os_type == "Windows":
-            name = "exe.win-amd64-3.11_" + str(self.sha)
+            name = "exe.win-amd64-3.11_" + str(self.version)
         elif self.os_type == "Linux":
-            name = "exe.linux-x86_64-3.11_" + str(self.sha)
+            name = "exe.linux-x86_64-3.11_" + str(self.version)
 
         current_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -171,7 +171,7 @@ class Updater:
         os.rename(os.path.join(current_dir, "example.config.json"),
                   os.path.join(current_dir, "config.json"))
 
-        self.config["version"] = str(self.sha)
+        self.config["version"] = str(self.version)
         with open(os.path.join(current_dir, "config.json"), "w", encoding="utf-8") as file:
             json.dump(self.config, file, indent=2, ensure_ascii=False)
 
